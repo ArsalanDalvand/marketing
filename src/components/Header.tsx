@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import {
   Dropdown,
-  DropdownButton,
   NavDropdown,
   NavItem,
   NavLink,
 } from "react-bootstrap";
 import { RequestCourseModal } from "../components/RequestCourseModal";
+import { siteConfig } from "../config/siteConfig";
 
 import styles from "./Header.module.scss";
 
@@ -73,7 +73,6 @@ import logo from "../lib/images/PL-logo-blue-white.png";
 
 export const Header: React.FC = () => {
   const [collapsed, setCollapsed] = React.useState(true);
-
   const [showRequestCourseModal, setShowRequestCourseModal] =
     React.useState(false);
 
@@ -88,54 +87,45 @@ export const Header: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div className={classnames("container-fluid pt-4", styles.header)}>
-        <div className="container-md text-end">
-          <button
-            className="btn btn-light btn-md me-3 "
-            onClick={() => setShowRequestCourseModal(true)}
-          >
-            Free sign up
-          </button>
-          <DropdownButton
-            id="login-dropdown"
-            title="Login"
-            variant="light"
-            align="end"
-            className="d-inline-block me-3"
-          >
-            <Dropdown.Item
-              href="https://us.prairielearn.com/"
-              aria-label="Log in to PrairieLearn (opens in a new tab)"
+      <div className={classnames("container-fluid pt-3 pb-2", styles.header)}>
+        <div className="container-md d-flex justify-content-between align-items-center">
+          <div className="text-white small d-none d-md-block opacity-75">
+            {siteConfig.brand.tagline}
+          </div>
+          <div className="d-flex align-items-center gap-2 ms-auto">
+            <button
+              className="btn btn-warning btn-sm fw-medium shadow-sm"
+              onClick={() => setShowRequestCourseModal(true)}
             >
-              PrairieLearn
-            </Dropdown.Item>
-            <Dropdown.Item
-              href="https://us.prairietest.com/"
-              aria-label="Log in to PrairieTest (opens in a new tab)"
+              <i className="bi bi-plus-circle me-1"></i>
+              {siteConfig.nav.requestCourse}
+            </button>
+            <a
+              href={siteConfig.links.appLoginUrl}
+              className="btn btn-light btn-sm fw-medium shadow-sm"
             >
-              PrairieTest
-            </Dropdown.Item>
-          </DropdownButton>
+              <i className="bi bi-box-arrow-in-left me-1"></i>
+              {siteConfig.nav.login}
+            </a>
+          </div>
         </div>
       </div>
-      <RequestCourseModal
-        show={showRequestCourseModal}
-        onHide={() => setShowRequestCourseModal(false)}
-      />
+
       <nav
         className={classnames(
-          "navbar navbar-expand-md navbar-dark navbar-primary",
+          "navbar navbar-expand-md navbar-dark navbar-primary shadow-sm",
           styles.header,
         )}
       >
         <div className="container-fluid container-md">
-          <Link href="/" className="navbar-brand">
+          <Link href="/" className="navbar-brand d-flex align-items-center gap-2">
             <Image
               src={logo}
-              width={285}
-              height={60}
-              alt="PrairieLearn"
+              width={220}
+              height={48}
+              alt={siteConfig.brand.name}
               className={styles.logo}
+              priority
             />
           </Link>
           <div className="d-flex flex-row">
@@ -154,7 +144,7 @@ export const Header: React.FC = () => {
             className={classnames("navbar-collapse", { collapse: collapsed })}
             id="navbar"
           >
-            <ul className="navbar-nav ms-auto mb-2 mb-sm-0">
+            <ul className="navbar-nav me-auto mb-2 mb-sm-0">
               <Dropdown as={NavItem}>
                 <Dropdown.Toggle
                   as={NavLink}
@@ -165,18 +155,18 @@ export const Header: React.FC = () => {
                     ),
                   })}
                 >
-                  Product
+                  محصول و امکانات
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <NavDropdownItem href="/" activeMatchExactHref>
-                    PrairieLearn
-                  </NavDropdownItem>
-                  <NavDropdownItem href="/products/prairietest">
-                    PrairieTest
-                  </NavDropdownItem>
-                  <NavDropdownItem href="/products/testing-center">
-                    Testing Centers
-                  </NavDropdownItem>
+                  {siteConfig.nav.products.map((item, idx) => (
+                    <NavDropdownItem
+                      key={idx}
+                      href={item.href}
+                      activeMatchExactHref={item.href === "/"}
+                    >
+                      {item.label}
+                    </NavDropdownItem>
+                  ))}
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown as={NavItem}>
@@ -189,53 +179,36 @@ export const Header: React.FC = () => {
                     ),
                   })}
                 >
-                  Catalog
+                  کاتالوگ و منابع
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <NavDropdownItem href="/catalog/questions">
-                    Questions
-                  </NavDropdownItem>
-                  <NavDropdownItem href="/catalog/assessments">
-                    Assessments
-                  </NavDropdownItem>
-                  <NavDropdownItem href="/catalog/oer">
-                    OER Questions
-                  </NavDropdownItem>
-                  <NavDropdownItem href="/catalog/elements">
-                    OER Elements
-                  </NavDropdownItem>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown as={NavItem}>
-                <Dropdown.Toggle
-                  as={NavLink}
-                  className={classnames(styles["nav-link"], {
-                    [`fw-bold ${styles.active}`]: useIsActive(
-                      ["/about", "/research"],
-                      false,
-                    ),
-                  })}
-                >
-                  About
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <NavDropdownItem href="/about" activeMatchExactHref={true}>
-                    About Us
-                  </NavDropdownItem>
-                  <NavDropdownItem href="/about/blog">Blog</NavDropdownItem>
-                  <NavDropdownItem href="/research">Research</NavDropdownItem>
+                  {siteConfig.nav.catalog.map((item, idx) => (
+                    <NavDropdownItem key={idx} href={item.href}>
+                      {item.label}
+                    </NavDropdownItem>
+                  ))}
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    as="a"
+                    href={siteConfig.links.docsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    مستندات طراحان سوال
+                  </NavDropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <li className="nav-item">
-                <RouterNavLink href="/support">Support</RouterNavLink>
+                <RouterNavLink href="/research">پژوهش و نتایج</RouterNavLink>
               </li>
               <li className="nav-item">
-                <RouterNavLink href="/pricing">Pricing</RouterNavLink>
+                <RouterNavLink href="/support">راهنما و پشتیبانی</RouterNavLink>
               </li>
             </ul>
           </div>
         </div>
       </nav>
+
       <RequestCourseModal
         show={showRequestCourseModal}
         onHide={() => setShowRequestCourseModal(false)}

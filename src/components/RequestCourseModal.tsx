@@ -1,34 +1,37 @@
 import React from "react";
 import Modal, { ModalProps } from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
 import Link from "next/link";
+import { siteConfig } from "../config/siteConfig";
 
-interface RequestCourseModal extends Pick<ModalProps, "show" | "onHide"> {}
+interface RequestCourseModalProps
+  extends Pick<ModalProps, "show" | "onHide"> {}
 
-export const RequestCourseModal: React.FC<RequestCourseModal> = (props) => {
+export const RequestCourseModal: React.FC<RequestCourseModalProps> = (props) => {
   return (
     <Modal {...props} centered aria-labelledby="request-course-modal-title">
       <Modal.Header closeButton>
-        <Modal.Title id="request-course-modal-title">
-          Request a course
+        <Modal.Title id="request-course-modal-title" className="fw-bold">
+          {siteConfig.requestCourseModal.title}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <p>
-          Click below to request a course. You&apos;ll be asked to sign in to
-          PrairieLearn, after which you can submit your course details.
+      <Modal.Body className="py-4">
+        <p className="text-secondary leading-relaxed">
+          {siteConfig.requestCourseModal.body}
         </p>
-        <p>
+        <div className="d-grid gap-2 my-3">
           <a
-            href="https://us.prairielearn.com/pl/request_course"
-            className="btn btn-primary"
+            href={siteConfig.links.appRequestCourseUrl}
+            className="btn btn-primary btn-lg fw-medium shadow-sm"
           >
-            Request a course
+            <i className="bi bi-file-earmark-plus me-2"></i>
+            {siteConfig.requestCourseModal.button}
           </a>
-        </p>
-        <p className="mb-0">
-          Have any questions? <Link href="/support">Contact us</Link> and we
-          will get back to you soon!
+        </div>
+        <p className="mb-0 text-muted small text-center mt-3">
+          {siteConfig.requestCourseModal.supportPrompt}{" "}
+          <Link href="/support" className="text-primary fw-medium">
+            {siteConfig.requestCourseModal.supportLinkText}
+          </Link>
         </p>
       </Modal.Body>
     </Modal>

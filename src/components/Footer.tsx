@@ -1,12 +1,26 @@
 import Link from "next/link";
 import React from "react";
+import { siteConfig } from "../config/siteConfig";
 
 interface FooterLinkProps {
   href: string;
+  external?: boolean;
   children: React.ReactNode;
 }
 
-const FooterLink: React.FC<FooterLinkProps> = ({ href, children }) => {
+const FooterLink: React.FC<FooterLinkProps> = ({ href, external, children }) => {
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className="link-secondary text-decoration-none"
+      >
+        {children}
+      </a>
+    );
+  }
   return (
     <Link href={href} className="link-secondary text-decoration-none">
       {children}
@@ -16,79 +30,93 @@ const FooterLink: React.FC<FooterLinkProps> = ({ href, children }) => {
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-light pt-4">
+    <footer className="bg-light pt-5 pb-4 border-top">
       <div className="container-md">
-        <div className="row">
-          <div className="col-6 col-sm-4 mb-3">
-            <h6 className="text-uppercase text-secondary fw-bold">Resources</h6>
+        <div className="row g-4">
+          <div className="col-12 col-md-4 mb-3">
+            <h5 className="fw-bold text-primary mb-2">
+              {siteConfig.brand.name}
+            </h5>
+            <p className="text-muted small leading-relaxed">
+              {siteConfig.brand.description}
+            </p>
+            <div className="d-flex gap-3 mt-3">
+              <a
+                href={siteConfig.links.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-secondary fs-5"
+                aria-label="GitHub"
+              >
+                <i className="bi bi-github"></i>
+              </a>
+              <a
+                href={siteConfig.links.docsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-secondary fs-5"
+                aria-label="Documentation"
+              >
+                <i className="bi bi-book"></i>
+              </a>
+              <a
+                href={`mailto:${siteConfig.links.supportEmail}`}
+                className="text-secondary fs-5"
+                aria-label="Email Support"
+              >
+                <i className="bi bi-envelope"></i>
+              </a>
+            </div>
+          </div>
+
+          <div className="col-6 col-sm-4 col-md-2 mb-3">
+            <h6 className="text-uppercase text-secondary fw-bold mb-3">
+              {siteConfig.footer.resourcesTitle}
+            </h6>
             <ul className="list-unstyled">
-              <li className="mb-2">
-                <FooterLink href="/support">Support</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="https://docs.prairielearn.com">
-                  Documentation
-                </FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="https://github.com/PrairieLearn/PrairieLearn">
-                  GitHub
-                </FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/research">Research</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/pricing">Pricing</FooterLink>
-              </li>
+              {siteConfig.footer.resources.map((item, idx) => (
+                <li className="mb-2" key={idx}>
+                  <FooterLink href={item.href} external={item.external}>
+                    {item.label}
+                  </FooterLink>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="col-6 col-sm-4 mb-3">
-            <h6 className="text-uppercase text-secondary fw-bold">Legal</h6>
+
+          <div className="col-6 col-sm-4 col-md-3 mb-3">
+            <h6 className="text-uppercase text-secondary fw-bold mb-3">
+              {siteConfig.footer.legalTitle}
+            </h6>
             <ul className="list-unstyled">
-              <li className="mb-2">
-                <FooterLink href="/legal/terms">Terms of Service</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/legal/privacy">Privacy Policy</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/legal/subprocessors">
-                  Subprocessors
-                </FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/abuse">Report abuse</FooterLink>
-              </li>
+              {siteConfig.footer.legal.map((item, idx) => (
+                <li className="mb-2" key={idx}>
+                  <FooterLink href={item.href} external={item.external}>
+                    {item.label}
+                  </FooterLink>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="col-6 col-sm-4 mb-3">
-            <h6 className="text-uppercase text-secondary fw-bold">Company</h6>
+
+          <div className="col-12 col-sm-4 col-md-3 mb-3">
+            <h6 className="text-uppercase text-secondary fw-bold mb-3">
+              {siteConfig.footer.aboutTitle}
+            </h6>
             <ul className="list-unstyled">
-              <li className="mb-2">
-                <FooterLink href="/about">About</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/jobs-ashby">Jobs</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/security">Security</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="/accessibility">Accessibility</FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="https://www.instagram.com/prairielearn/">
-                  Instagram
-                </FooterLink>
-              </li>
-              <li className="mb-2">
-                <FooterLink href="https://www.linkedin.com/company/prairielearn/">
-                  LinkedIn
-                </FooterLink>
-              </li>
+              {siteConfig.footer.about.map((item, idx) => (
+                <li className="mb-2" key={idx}>
+                  <FooterLink href={item.href} external={item.external}>
+                    {item.label}
+                  </FooterLink>
+                </li>
+              ))}
             </ul>
           </div>
+        </div>
+
+        <div className="border-top pt-3 mt-3 text-center text-muted small">
+          {siteConfig.footer.copyright}
         </div>
       </div>
     </footer>

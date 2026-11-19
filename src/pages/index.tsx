@@ -3,7 +3,6 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import classnames from "classnames";
-import Link from "next/link";
 import Stack from "../components/Stack";
 import { Heading } from "../components/Heading";
 import { ExampleQuestion } from "../components/ExampleQuestion";
@@ -18,38 +17,20 @@ import styles from "./index.module.scss";
 import { Accordion, Carousel, CarouselItem } from "react-bootstrap";
 import { RequestCourseModal } from "../components/RequestCourseModal";
 import { illinois, ubc } from "../lib/images/universities";
-
-const TALKING_POINTS = [
-  {
-    header: "In-class activities",
-    body: "Build activities to measure understanding during lectures, or create group assignments for lab sessions.",
-  },
-  {
-    header: "Homework",
-    body: "Students get instant feedback and can keep attempting problems until they achieve mastery.",
-  },
-  {
-    header: "Practice",
-    body: "Because question parameters are randomized, you can give students the chance to practice the same questions that will appear on tests.",
-  },
-  {
-    header: "Testing",
-    body: "Run automated tests in proctored facilities, or run bring-your-own-device tests in the classroom or online.",
-  },
-];
+import { siteConfig } from "../config/siteConfig";
 
 const CAROUSEL_IMAGES = [
   {
     src: richorder,
-    alt: "PrairieLearn question asking students to construct a proof by ordering predefined statements",
+    alt: "سوال تعاملی مرتب‌سازی بلوک‌های کد و استدلال ریاضی در سامانه",
   },
   {
     src: richball,
-    alt: "PrairieLearn question asking students to sketch a line illustrating the rate of change of a trajectory function",
+    alt: "سوال تعاملی رسم بردار سرعت و تحلیل توابع فیزیک",
   },
   {
     src: richFBD,
-    alt: "PrairieLearn question asking students to construct a free body diagram",
+    alt: "سوال دیاگرام جسم آزاد در مکانیک مهندسی",
   },
 ];
 
@@ -73,12 +54,9 @@ interface HomeProps {
   seed: number;
 }
 
-// These are shown above the scrolling logos.
 const MAJOR_UNIVERSITY_LOGOS = [
-  { alt: "University of Illinois at Urbana-Champaign", src: illinois },
-  { alt: "University of British Columbia", src: ubc },
-  //   { alt: "University of California, Santa Barbara", src: ucsb },
-  //   { alt: "University of California, San Diego", src: ucsd },
+  { alt: "دانشگاه همکار ۱", src: illinois },
+  { alt: "دانشگاه همکار ۲", src: ubc },
 ];
 
 const Home: React.FC<HomeProps> = ({ seed }) => {
@@ -88,110 +66,133 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
   return (
     <React.Fragment>
       <Head>
-        <title>PrairieLearn</title>
-        <meta property="og:title" content="PrairieLearn" />
+        <title>{siteConfig.brand.name} | {siteConfig.brand.tagline}</title>
+        <meta property="og:title" content={siteConfig.brand.name} />
         <meta
           property="og:description"
-          content="The most comprehensive assessment platform"
+          content={siteConfig.brand.description}
         />
       </Head>
 
-      <div className={classnames("container-fluid py-4", styles.banner)}>
+      {/* Hero Banner */}
+      <div className={classnames("container-fluid py-5", styles.banner)}>
         <div className="container-md">
           <Row>
             <Column>
+              <div className="text-center mb-3">
+                <span className="badge bg-light text-primary px-3 py-2 rounded-pill fw-normal fs-6 shadow-sm">
+                  <i className="bi bi-stars me-1 text-warning"></i>
+                  {siteConfig.hero.badge}
+                </span>
+              </div>
               <h1
                 className={classnames(
-                  "mt-3 fs-1 text-center text-white",
+                  "mt-2 fs-1 text-center text-white fw-bold leading-tight",
                   styles["text-wrap-balance"],
                 )}
               >
-                The most comprehensive assessment platform
+                {siteConfig.hero.title}
               </h1>
-              <div className="d-flex flex-row justify-content-center flex-wrap">
-                <div className="d-inline-flex flex-column">
-                  <button
-                    className="btn btn-warning btn-lg me-3 mt-3"
-                    onClick={() => setShowRequestCourseModal(true)}
-                  >
-                    Start now for free!
-                  </button>
-                </div>
-                <Link href="/demo" className="btn btn-warning btn-lg me-3 mt-3">
-                  Schedule a Demo
-                </Link>
+              <p className="text-center text-white-50 mt-3 fs-5 mx-auto max-w-2xl">
+                {siteConfig.hero.subtitle}
+              </p>
+              <div className="d-flex flex-row justify-content-center flex-wrap gap-3 mt-4">
+                <a
+                  href={siteConfig.links.appLoginUrl}
+                  className="btn btn-warning btn-lg fw-bold shadow px-4 py-2"
+                >
+                  <i className="bi bi-box-arrow-in-left me-2"></i>
+                  {siteConfig.hero.primaryCta}
+                </a>
+                <button
+                  className="btn btn-outline-light btn-lg fw-medium px-4 py-2"
+                  onClick={() => setShowRequestCourseModal(true)}
+                >
+                  <i className="bi bi-plus-circle me-2"></i>
+                  {siteConfig.hero.secondaryCta}
+                </button>
+                <a
+                  href={siteConfig.links.demoCourseUrl}
+                  className="btn btn-outline-warning btn-lg fw-medium px-4 py-2"
+                >
+                  <i className="bi bi-play-circle me-2"></i>
+                  {siteConfig.hero.demoCta}
+                </a>
               </div>
             </Column>
           </Row>
         </div>
       </div>
 
-      <div className="container-fluid py-4">
+      {/* Mastery Learning & Interactive Question Preview */}
+      <div className="container-fluid py-5">
         <div className="container-md">
-          <Heading>Mastery learning meets online assessment</Heading>
-          <div className="row">
-            <p>
-              PrairieLearn is an online assessment and learning system that
-              empowers instructors to create robust educational resources for
-              students.
+          <Heading>{siteConfig.mastery.title}</Heading>
+          <div className="row mb-4">
+            <p className="fs-5 text-secondary">
+              {siteConfig.mastery.description}
             </p>
           </div>
-          <div className="row">
-            <div className="col-md-6 order-1 pt-2">
-              <h5>Adaptive question variants with real-time feedback</h5>
-              <p>
-                Instructors easily write questions as code, which automatically
-                generate and grade infinite variants of themselves.
-              </p>
-              <h5>Empowering students to master content</h5>
-              <p>
-                Students are encouraged to keep trying new variants of the same
-                question until they achieve mastery.
-              </p>
+          <div className="row g-4 align-items-center">
+            <div className="col-md-6 order-1">
+              <div className="p-4 bg-light rounded-3 border mb-3">
+                <h5 className="fw-bold text-primary mb-2">
+                  <i className="bi bi-shuffle me-2"></i>
+                  {siteConfig.mastery.feature1Title}
+                </h5>
+                <p className="text-muted mb-0 leading-relaxed">
+                  {siteConfig.mastery.feature1Desc}
+                </p>
+              </div>
+
+              <div className="p-4 bg-light rounded-3 border">
+                <h5 className="fw-bold text-success mb-2">
+                  <i className="bi bi-check-circle me-2"></i>
+                  {siteConfig.mastery.feature2Title}
+                </h5>
+                <p className="text-muted mb-0 leading-relaxed">
+                  {siteConfig.mastery.feature2Desc}
+                </p>
+              </div>
             </div>
-            <div className="col-md-6 order-2 pt-2">
-              <ExampleQuestion seed={seed} />
+            <div className="col-md-6 order-2">
+              <div className="shadow rounded overflow-hidden border">
+                <ExampleQuestion seed={seed} />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className={classnames("container-fluid py-4", styles.container)}>
+      {/* Social Proof & Metrics */}
+      <div className={classnames("container-fluid py-5", styles.container)}>
         <div className="container-md">
           <Stack>
             <Row>
               <Column>
                 <Stack spacing={3}>
-                  <Heading>Used by the best</Heading>
-                  <p>
-                    Instructors at top universities in the United States and
-                    Canada have been using PrairieLearn to teach the next
-                    generation of students.
+                  <Heading>{siteConfig.stats.title}</Heading>
+                  <p className="fs-5 text-secondary">
+                    {siteConfig.stats.subtitle}
                   </p>
                 </Stack>
               </Column>
             </Row>
             <Row>
-              <div className="col-6 col-md-3 mt-2">
-                <div className="small text-muted">Institutions</div>
-                <div className="display-5 lh-1">50+</div>
-              </div>
-              <div className="col-6 col-md-3 mt-2">
-                <div className="small text-muted">Courses</div>
-                <div className="display-5 lh-1">1000+</div>
-              </div>
-              <div className="col-6 col-md-3 mt-2">
-                <div className="small text-muted">Students</div>
-                <div className="display-5 lh-1">185k+</div>
-              </div>
-              <div className="col-6 col-md-3 mt-2">
-                <div className="small text-muted">Questions Graded</div>
-                <div className="display-5 lh-1">165M+</div>
-              </div>
+              {siteConfig.stats.items.map((stat, idx) => (
+                <div className="col-6 col-md-3 mt-3" key={idx}>
+                  <div className="p-3 bg-white rounded-3 shadow-sm border text-center">
+                    <div className="display-6 fw-bold text-primary lh-1 mb-2">
+                      {stat.value}
+                    </div>
+                    <div className="small text-muted">{stat.label}</div>
+                  </div>
+                </div>
+              ))}
             </Row>
             <Row>
               <Column>
-                <div className="d-flex flex-sm-row flex-column justify-content-around align-items-center gap-2 flex-wrap my-md-4 my-2">
+                <div className="d-flex flex-sm-row flex-column justify-content-around align-items-center gap-2 flex-wrap my-md-4 my-2 opacity-75">
                   {MAJOR_UNIVERSITY_LOGOS.map((logo, index) => (
                     <div
                       key={index}
@@ -203,10 +204,10 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
                       <Image
                         src={logo.src}
                         alt={logo.alt}
-                        height={80}
+                        height={60}
                         style={{
                           objectFit: "contain",
-                          maxHeight: "80px",
+                          maxHeight: "60px",
                           width: "auto",
                           maxWidth: "100%",
                         }}
@@ -222,27 +223,24 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
         </div>
       </div>
 
-      <div className="container-fluid py-4">
+      {/* Write Once, Reuse Anywhere - Talking Points Accordion */}
+      <div className="container-fluid py-5">
         <div className="container-md">
           <Row>
             <Column>
-              <Heading>
-                Write questions once, use them any time and anywhere
-              </Heading>
-              <p>
-                PrairieLearn questions are defined as code, which is what makes
-                them so powerful. Once a question is created, it can be reused
-                in any future assessment. And students can keep trying new
-                variants of difficult problems until they&apos;ve mastered the
-                topic—no need for you to manually write new questions.
+              <Heading>{siteConfig.talkingPoints.title}</Heading>
+              <p className="fs-5 text-secondary mb-4">
+                {siteConfig.talkingPoints.description}
               </p>
-              <Accordion defaultActiveKey="0">
-                {TALKING_POINTS.map((point, index) => (
+              <Accordion defaultActiveKey="0" className="shadow-sm">
+                {siteConfig.talkingPoints.items.map((point, index) => (
                   <Accordion.Item eventKey={index.toString()} key={index}>
                     <Accordion.Header>
-                      <strong>{point.header}</strong>
+                      <strong className="fs-6">{point.header}</strong>
                     </Accordion.Header>
-                    <Accordion.Body>{point.body}</Accordion.Body>
+                    <Accordion.Body className="text-secondary leading-relaxed">
+                      {point.body}
+                    </Accordion.Body>
                   </Accordion.Item>
                 ))}
               </Accordion>
@@ -251,19 +249,15 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
         </div>
       </div>
 
-      <div className={classnames("container-fluid py-4", styles.container)}>
+      {/* Advanced Capabilities / Carousel */}
+      <div className={classnames("container-fluid py-5", styles.container)}>
         <div className="container-md">
-          <Heading>Automation without compromising quality </Heading>
-          <p>
-            When using PrairieLearn, you do not need to be concerned about
-            trivialising course material when offering computer-based
-            assessments. In addition to standard inputs such as numerical,
-            multiple-choice, checkboxes and dropdown menu, PrairieLearn will let
-            students provide answers as graphical input, code, ordered blocks
-            and much more!
+          <Heading>{siteConfig.automation.title}</Heading>
+          <p className="fs-5 text-secondary mb-4">
+            {siteConfig.automation.description}
           </p>
 
-          <Carousel variant="dark" controls={false}>
+          <Carousel variant="dark" controls={false} className="shadow rounded bg-white p-3 border">
             {CAROUSEL_IMAGES.map(({ src, alt }, index) => (
               <CarouselItem key={index}>
                 <div
@@ -277,7 +271,7 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
                   <Image
                     src={src}
                     alt={alt}
-                    className="pb-5 position-relative"
+                    className="pb-4 position-relative"
                     priority
                     style={{
                       aspectRatio: "3 / 2",
@@ -287,6 +281,9 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
                       height: "auto",
                     }}
                   />
+                  <div className="text-center text-muted small pb-2">
+                    {alt}
+                  </div>
                 </div>
               </CarouselItem>
             ))}
@@ -294,29 +291,35 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
         </div>
       </div>
 
-      <div className="py-4 bg-dark">
+      {/* Open-Source Section */}
+      <div className="py-5 bg-dark">
         <div className="container-md">
           <Row>
             <Column>
-              <h2 className="text-white">Open-source. Forever.</h2>
-              <p className="text-white ">
-                PrairieLearn began life as open-source software, and we&apos;re
-                committed to making sure it stays that way. With an active
-                developer community of professors, course staff, and students,
-                PrairieLearn gets better all the time.
+              <h2 className="text-white fw-bold mb-3">
+                {siteConfig.openSource.title}
+              </h2>
+              <p className="text-white-50 fs-5 mb-4 leading-relaxed">
+                {siteConfig.openSource.description}
               </p>
-              <div className="d-flex">
+              <div className="d-flex flex-wrap gap-3">
                 <a
-                  href="https://github.com/PrairieLearn/PrairieLearn"
-                  className="btn btn-light me-3"
+                  href={siteConfig.links.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-light btn-lg fw-medium shadow-sm"
                 >
-                  GitHub →
+                  <i className="bi bi-github me-2"></i>
+                  {siteConfig.openSource.githubButton}
                 </a>
                 <a
-                  href="https://docs.prairielearn.com"
-                  className="btn btn-light"
+                  href={siteConfig.links.docsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-outline-light btn-lg fw-medium"
                 >
-                  Documentation →
+                  <i className="bi bi-book me-2"></i>
+                  {siteConfig.openSource.docsButton}
                 </a>
               </div>
             </Column>
@@ -324,11 +327,12 @@ const Home: React.FC<HomeProps> = ({ seed }) => {
         </div>
       </div>
 
+      {/* Banner Call To Action */}
       <BannerCTA
-        title="View demo course!"
-        subtitle="Explore the demo course to see how this all comes together."
-        buttonLabel="Demo course"
-        href="https://us.prairielearn.com/pl/course_instance/4970"
+        title={siteConfig.ctaBanner.title}
+        subtitle={siteConfig.ctaBanner.subtitle}
+        buttonLabel={siteConfig.ctaBanner.buttonLabel}
+        href={siteConfig.links.appLoginUrl}
       />
 
       <RequestCourseModal
