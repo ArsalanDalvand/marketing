@@ -116,7 +116,17 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="border-top pt-3 mt-3 text-center text-muted small">
-          {siteConfig.footer.copyright}
+          {siteConfig.footer.copyright} &mdash; توسعه‌یافته و بومی‌سازی‌شده توسط{' '}
+          <a
+            href="https://t.me/b_7vat4r"
+            target="_blank"
+            rel="noreferrer"
+            className="text-decoration-none fw-medium text-dark"
+            title="ارسلان دالوند (arsalan_dalvand@mathdep.iust.ac.ir)"
+          >
+            ارسلان دالوند
+          </a>{' '}
+          (دانشکده ریاضی دانشگاه علم و صنعت ایران)
         </div>
       </div>
     </footer>

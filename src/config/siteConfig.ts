@@ -109,7 +109,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3080";
 const DOCS_URL = process.env.NEXT_PUBLIC_DOCS_URL || "https://docs.prairielearn.com";
 const GITHUB_URL =
   process.env.NEXT_PUBLIC_GITHUB_URL ||
-  "https://github.com/ArsalanDalvand/PrairieLearn";
+  "https://github.com/ArsalanDalvand/smart-learning";
 
 export const siteConfig: SiteConfig = {
   brand: {
